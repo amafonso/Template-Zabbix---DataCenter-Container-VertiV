@@ -1,4 +1,4 @@
-# Template-Zabbix---DataCenter-Container-VertiV
+# Zabbix Templates
 
 ## Monitoramento do ambiente de DataCenter Container da VertiV
 
