@@ -11,8 +11,7 @@
 - Talvez sejá necessário atualizar para versão do Zabbix atual.
 - Pasta templates
 
-Gostou do meu trabalho?
-💖 Sua contribuição:  
+Gostou do meu trabalho?  
 
 [![Doe](https://www.paypalobjects.com/pt_BR/BR/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=S5C2C8XSXPF3N&no_recurring=0&currency_code=BRL)
 
