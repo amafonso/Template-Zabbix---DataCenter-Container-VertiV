@@ -1,0 +1,382 @@
+zabbix_export:
+  version: '5.2'
+  date: '2025-01-15T09:59:15Z'
+  groups:
+    -
+      name: Templates
+  templates:
+    -
+      template: 'Template Vertiv WatchDog'
+      name: 'Template Vertiv WatchDog'
+      templates:
+        -
+          name: 'Template ICMP Ping and SNMP'
+      groups:
+        -
+          name: Templates
+      applications:
+        -
+          name: Battery
+        -
+          name: Environment
+        -
+          name: Environmental
+        -
+          name: Healthy
+        -
+          name: Information
+        -
+          name: Power
+        -
+          name: Sensor
+        -
+          name: Test
+      items:
+        -
+          name: 'WATCHDOG Device availability'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.2.1.4.1
+          key: internalAvail
+          delay: 5m
+          history: 7d
+          applications:
+            -
+              name: Healthy
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+          triggers:
+            -
+              expression: '{last()}<>1'
+              name: 'Dispositivo de controle de ambiente esta apresentando falhas'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Humidity reading'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.2.1.6.1
+          key: internalHumidity
+          history: 7d
+          units: '%'
+          description: 'Humidity reading'
+          applications:
+            -
+              name: Environment
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+          triggers:
+            -
+              expression: '{avg(#2)}>=60 or {avg(#2)}<=15'
+              name: 'Alarme de umidade: {ITEM.VALUE}'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Label'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.2.1.3.1
+          key: internalLabel
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Current reading for Temperature'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.2.1.5.1
+          key: internalTemp
+          history: 7d
+          value_type: FLOAT
+          units: C
+          description: 'Current reading for Temperature in tenths of degrees. Units are given by temperatureUnits field in deviceInfo'
+          applications:
+            -
+              name: Environment
+            -
+              name: Healthy
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.1'
+          triggers:
+            -
+              expression: '{avg(#2)}>=27 or {avg(#2)}<=10'
+              name: 'Alarme de alta temperatura: {ITEM.VALUE}'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Product model number'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.8.0
+          key: productModelNumber.0
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Product part number'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.9.0
+          key: productPartNumber
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Product platform'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.11.0
+          key: productPlatform
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          description: 'Product platform'
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Title'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.1.0
+          key: productTitle
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Product version'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.2.0
+          key: productVersion
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Sensor Interno device availability'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.4.1
+          key: t3hdSensorAvail.1
+          history: 30d
+          description: |
+            Device availability:
+            0 =Unavailable
+            1 =Available
+            2 =Partially Unavailable
+          applications:
+            -
+              name: Healthy
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+          triggers:
+            -
+              expression: '{last()}<>1'
+              name: 'Dispositivo de controle de ambiente interno esta apresentando falhas'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Sensor External A device availability'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.9.1
+          key: t3hdSensorExtAAvail.1
+          history: 30d
+          description: |
+            Device availability:
+            0 =Unavailable
+            1 =Available
+            2 =Partially Unavailable
+          applications:
+            -
+              name: Healthy
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+        -
+          name: 'WATCHDOG Sensor External A temperature in tenths of a degree'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.11.1
+          key: t3hdSensorExtATemp.1
+          history: 30d
+          value_type: FLOAT
+          units: C
+          description: 'External A temperature in tenths of a degree. Units are given by temperatureUnits field in deviceInfo.'
+          applications:
+            -
+              name: Sensor
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.1'
+          triggers:
+            -
+              expression: |
+                {last()}<=10 or 
+                {last()}>=27
+              name: 'Alarme de alta temperatura: {ITEM.VALUE}, sensor External A'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Sensor External B device availability'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.12.1
+          key: t3hdSensorExtBAvail.1
+          history: 30d
+          description: |
+            Device availability:
+            0 =Unavailable
+            1 =Available
+            2 =Partially Unavailable
+          applications:
+            -
+              name: Healthy
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+        -
+          name: 'WATCHDOG Sensor External B temperature in tenths of a degree'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.14.1
+          key: t3hdSensorExtBTemp.1
+          history: 30d
+          value_type: FLOAT
+          units: C
+          description: 'External A temperature in tenths of a degree. Units are given by temperatureUnits field in deviceInfo.'
+          applications:
+            -
+              name: Sensor
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.1'
+          triggers:
+            -
+              expression: |
+                {last()}<=10 or 
+                {last()}>=27
+              name: 'Alarme de alta temperatura: {ITEM.VALUE}, sensor External B'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Internal dewpoint in tenths of a degree'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.8.1
+          key: t3hdSensorIntDewPoint.1
+          delay: 5m
+          history: 7d
+          value_type: FLOAT
+          units: C
+          description: 'Internal dewpoint in tenths of a degree. Units are given by temperatureUnits field in deviceInfo.'
+          applications:
+            -
+              name: Sensor
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.1'
+          triggers:
+            -
+              expression: |
+                {last()}<=10 or 
+                {last()}>=27
+              name: 'Alarme de alta temperatura: {ITEM.VALUE}, sensor Internal dewpoint'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Sensor Internal Humidity reading'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.7.1
+          key: t3hdSensorIntHumidity.1
+          history: 7d
+          units: '%'
+          description: 'Internal Humidity reading'
+          applications:
+            -
+              name: Environment
+          valuemap:
+            name: VERTIV-BB-MIB_Avaliable
+          triggers:
+            -
+              expression: '{avg(#2)}>=60 or {avg(#2)}<=15'
+              name: 'Alarme de umidade: {ITEM.VALUE}, sensor Interno'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Sensor Internal temperature in tenths of a degree'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.6.1
+          key: t3hdSensorIntTemp.1
+          history: 30d
+          value_type: FLOAT
+          units: C
+          description: 'Internal temperature in tenths of a degree. Units are given by temperatureUnits field in deviceInfo.'
+          applications:
+            -
+              name: Sensor
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.1'
+          triggers:
+            -
+              expression: '{avg(#2)}>=27 or {avg(#2)}<=10'
+              name: 'Alarme de alta temperatura: {ITEM.VALUE}, sensor Interno'
+              priority: AVERAGE
+        -
+          name: 'WATCHDOG Sensor Internal label (user-defined)'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.3.1
+          key: t3hdSensorLabel.1
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          description: 'Internal label (user-defined)'
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG Sensor Serial Number'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.8.1.2.1
+          key: t3hdSensorSerial.1
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+        -
+          name: 'WATCHDOG  Current units for temperature/dewpoint'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.21239.5.1.1.7.0
+          key: temperatureUnits
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          applications:
+            -
+              name: Information
+  value_maps:
+    -
+      name: VERTIV-BB-MIB_Avaliable
+      mappings:
+        -
+          value: '0'
+          newvalue: Unavailable
+        -
+          value: '1'
+          newvalue: Available
+        -
+          value: '2'
+          newvalue: 'Partially Unavailable'

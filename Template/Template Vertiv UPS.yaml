@@ -1,0 +1,178 @@
+zabbix_export:
+  version: '5.2'
+  date: '2025-01-15T09:59:06Z'
+  groups:
+    -
+      name: Templates
+  templates:
+    -
+      template: 'Template Vertiv UPS'
+      name: 'Template Vertiv UPS'
+      templates:
+        -
+          name: 'Template ICMP Ping and SNMP'
+      groups:
+        -
+          name: Templates
+      applications:
+        -
+          name: Battery
+        -
+          name: Environmental
+        -
+          name: Information
+        -
+          name: Power
+        -
+          name: Test
+      items:
+        -
+          name: 'UPS Battery Status'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.2.1.0
+          key: upsBatteryStatus
+          history: 7d
+          description: 'The indication of the capacity remaining in the UPS system''s batteries.   A value of batteryNormal indicates that the remaining run-time is greater than upsConfigLowBattTime.  A value of batteryLow indicates that the remaining battery run-time is less than or equal to upsConfigLowBattTime.  A value of batteryDepleted indicates that the UPS will be unable to sustain the present load when and if the utility power is lost (including the possibility that the utility power is currently absent and the UPS is unable to sustain the output).'
+          applications:
+            -
+              name: Battery
+          valuemap:
+            name: 'Vertiv Battery Status'
+        -
+          name: 'UPS Estimated Charge Remaining'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.2.4.0
+          key: upsEstimatedChargeRemaining
+          history: 7d
+          units: '%'
+          description: 'An estimate of the battery charge remaining expressed as a percent of full charge.'
+          applications:
+            -
+              name: Battery
+        -
+          name: 'USP Estimated Minutes Remaining'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.2.3.0
+          key: upsEstimatedMinutesRemaining
+          history: 7d
+          units: m
+          description: |
+            An estimate of the time to battery charge depletion under the present load conditions if the utility power is off and remains off, or if it were to be lost and
+            remain off.
+          applications:
+            -
+              name: Battery
+        -
+          name: 'UPS agent software version'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.1.4.0
+          key: upsIdentAgentSoftwareVersion
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: |
+            The UPS agent software version.  This variable may or
+            may not have the same value as
+            upsIdentUPSSoftwareVersion in some implementations.
+          applications:
+            -
+              name: Information
+        -
+          name: 'Name of the UPS manufacturer.'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.1.1.0
+          key: upsIdentManufacturer
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: 'The name of the UPS manufacturer.'
+          applications:
+            -
+              name: Information
+        -
+          name: 'UPS Model designation.'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.1.2.0
+          key: upsIdentModel
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: 'The UPS Model designation.'
+          applications:
+            -
+              name: Information
+        -
+          name: 'UPS firmware/software version'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.1.3.0
+          key: upsIdentUPSSoftwareVersion
+          delay: 1h
+          trends: '0'
+          value_type: CHAR
+          description: |
+            The UPS firmware/software version(s).  This variable
+            may or may not have the same value as
+            upsIdentAgentSoftwareVersion in some implementations.
+          applications:
+            -
+              name: Information
+        -
+          name: 'UPS Seconds ON Battery'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.2.2.0
+          key: upsSecondsOnBattery
+          history: 7d
+          units: s
+          description: 'If the unit is on battery power, the elapsed time since the UPS last switched to battery power, or the time since the network management subsystem was last restarted, whichever is less.  Zero shall be returned if the unit is not on battery  power.'
+          applications:
+            -
+              name: Battery
+        -
+          name: 'UPS Test Results Summary'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.33.1.7.3
+          key: upsTestResultsSummary
+          history: 7d
+          description: 'The results of the current or last UPS diagnostics test performed.  The values for donePass(1), doneWarning(2), and doneError(3) indicate that the test completed either successfully, with a warning, or with an error, respectively.  The value aborted(4) is returned for tests which are aborted by setting the value of upsTestId to upsTestAbortTestInProgress.Tests which have not yet concluded are indicated byinProgress(5).  The value noTestsInitiated(6)indicates that no previous test results are available,such as is the case when no tests have been run sincethe last reinitialization of the network managementsubsystem and the system has no provision for non-volatile storage of test results.'
+          applications:
+            -
+              name: Test
+          valuemap:
+            name: 'Vertiv Test Results Summary'
+  value_maps:
+    -
+      name: 'Vertiv Battery Status'
+      mappings:
+        -
+          value: '1'
+          newvalue: unknown
+        -
+          value: '2'
+          newvalue: batteryNormal
+        -
+          value: '3'
+          newvalue: batteryLow
+        -
+          value: '4'
+          newvalue: batteryDepleted
+    -
+      name: 'Vertiv Test Results Summary'
+      mappings:
+        -
+          value: '1'
+          newvalue: donePass
+        -
+          value: '2'
+          newvalue: doneWarning
+        -
+          value: '3'
+          newvalue: doneError
+        -
+          value: '4'
+          newvalue: aborted
+        -
+          value: '5'
+          newvalue: inProgress
+        -
+          value: '6'
+          newvalue: noTestsInitiated
